@@ -1,17 +1,27 @@
 ---
+- name: Check if Python Version Installed
+  ansible.builtin.command: python{{ pyhton_install_version }} --version
+  register: python_version_installed
+  changed_when: false
+  failed_when: false
+  ignore_errors: true
+
 - name: Run OS specific tasks
-  include_tasks: "{{ ansible_os_family }}.yml"
+  ansible.builtin.include_tasks: "{{ ansible_os_family }}.yml"
+  when: python_version_installed != pyhton_install_version
 
-- name: Get Pip Installer
-  ansible.builtin.get_url:
-    url: https://bootstrap.pypa.io/get-pip.py
-    dest: /tmp/get-pip.py
-    mode: '0755'
+- name: Check if Pip Installed
+  ansible.builtin.command: pip{{ pyhton_install_version }} --version
+  register: pip_version_installed
+  changed_when: false
+  failed_when: false
+  ignore_errors: true
 
-- name: Install Pip
-  ansible.builtin.command: python{{ version }} /tmp/get-pip.py
+- name: Pip Install
+  ansible.builtin.include_tasks: install-pip.yml
+  when: pip_version_installed.rc != 0
 
-- name: Remove Pip Installer
-  ansible.builtin.file:
-    path: /tmp/get-pip.py
-    state: absent
+- name: Upgrade Pip
+  ansible.builtin.pip:
+    name: pip
+    state: latest

@@ -1,0 +1,8 @@
+- name: Get Pip Installer
+  ansible.builtin.get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: /tmp/get-pip.py
+    mode: '0755'
+
+- name: Install Pip
+  ansible.builtin.command: python{{ pyhton_install_version }} /tmp/get-pip.py

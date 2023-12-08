@@ -3,8 +3,10 @@
   ansible.builtin.dnf:
     update_cache: true
     cache_valid_time: 3600
+  become: true
 
 - name: Install Python
   ansible.builtin.dnf:
-    name: "python{{ version }}"
+    name: "python{{ pyhton_install_version }}"
     state: present
+  become: true

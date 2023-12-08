@@ -1,2 +1,3 @@
 ---
-version: 3.11
+pyhton_install_version: "3.11"
+pyhton_install_set_version: True
