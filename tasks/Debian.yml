@@ -1,0 +1,20 @@
+---
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Add Python Repository
+  ansible.builtin.apt_repository:
+    repo: ppa:deadsnakes/ppa
+    state: present
+
+- name: Install Python
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - "python{{ version }}"
+    - "python{{ version }}-venv"
+    - "python{{ version }}-dev"
+    - "python{{ version }}-distutils"
