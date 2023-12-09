@@ -19,17 +19,18 @@
     - "python{{ pyhton_install_version }}"
     - "python{{ pyhton_install_version }}-venv"
     - "python{{ pyhton_install_version }}-dev"
-    - "python{{ pyhton_install_version }}-distutils"
   become: true
 
-- name: Set Python Version
-  ansible.builtin.command: "update-alternatives --install /usr/bin/python3 python3 /usr/bin/python{{ pyhton_install_version }} 1"
-  changed_when: false
+- name: Set Default Python Version for python3
+  ansible.builtin.shell:
+    cmd: |
+      update-alternatives --install /usr/bin/python3 python3 /usr/bin/python{{ pyhton_install_version }} 1
+      update-alternatives --set python3 /usr/bin/python{{ pyhton_install_version }}
   when: pyhton_install_set_version
-  become: true
 
-- name: Switch Python Version
-  ansible.builtin.command: "update-alternatives --set python3 /usr/bin/python{{ pyhton_install_version }}"
-  changed_when: false
+- name: Set Default Python Version for python
+  ansible.builtin.shell:
+    cmd: |
+      update-alternatives --install /usr/bin/python python /usr/bin/python{{ pyhton_install_version }} 1
+      update-alternatives --set python /usr/bin/python{{ pyhton_install_version }}
   when: pyhton_install_set_version
-  become: true

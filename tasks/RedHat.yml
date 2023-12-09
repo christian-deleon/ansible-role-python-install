@@ -10,3 +10,17 @@
     name: "python{{ pyhton_install_version }}"
     state: present
   become: true
+
+- name: Set Default Python Version for python3
+  ansible.builtin.shell:
+    cmd: |
+      alternatives --install /usr/bin/python3 python3 /usr/bin/python{{ pyhton_install_version }} 1
+      alternatives --set python3 /usr/bin/python{{ pyhton_install_version }}
+  when: pyhton_install_set_version
+
+- name: Set Default Python Version for python
+  ansible.builtin.shell:
+    cmd: |
+      alternatives --install /usr/bin/python python /usr/bin/python{{ pyhton_install_version }} 1
+      alternatives --set python /usr/bin/python{{ pyhton_install_version }}
+  when: pyhton_install_set_version
